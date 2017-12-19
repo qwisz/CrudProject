@@ -1,6 +1,7 @@
-package com.andersen.dao;
+package com.andersen.jdbc;
 
 import com.andersen.DBWorker;
+import com.andersen.idao.ITeamDAO;
 import com.andersen.model.Developer;
 import com.andersen.model.Skill;
 import com.andersen.model.Team;
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TeamDAO implements CrudDAO {
+public class TeamDAO implements ITeamDAO {
 
     private static final String INSERT = "INSERT INTO teams (name) VALUES(?)";
     private static final String INSERT_TD = "INSERT INTO teams_developers (team_id, developer_id) VALUES(?, ?)";
@@ -17,6 +18,7 @@ public class TeamDAO implements CrudDAO {
     private static final String UPDATE = "UPDATE teams SET name = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM teams WHERE id = ?";
     private static final String EXISTS = "SELECT EXISTS(SELECT id FROM teams WHERE id = ?)";
+    private static final String EXISTS_BY_ARGS = "SELECT EXISTS(SELECT id FROM teams WHERE name = ?)";
     private Connection connection = DBWorker.getConnection();
     private DeveloperDAO developerDAO = new DeveloperDAO();
 
@@ -120,6 +122,10 @@ public class TeamDAO implements CrudDAO {
 
     public boolean isExist(Long id) {
         return isExist(id, EXISTS);
+    }
+
+    public boolean isExist(String name) {
+        return isExist(name, EXISTS_BY_ARGS);
     }
 
     public Team getById(Long id) {

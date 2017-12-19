@@ -1,6 +1,7 @@
-package com.andersen.dao;
+package com.andersen.jdbc;
 
 import com.andersen.DBWorker;
+import com.andersen.idao.IDeveloperDAO;
 import com.andersen.model.Developer;
 import com.andersen.model.Skill;
 
@@ -9,7 +10,8 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DeveloperDAO implements CrudDAO {
+public class DeveloperDAO implements IDeveloperDAO {
+
     private static final String INSERT = "INSERT INTO developers (first_name, last_name, speciality, salary) VALUES(?, ?, ?, ?)";
     private static final String INSERT_DS = "INSERT INTO developers_skills (developer_id, skill_id) VALUES(?, ?)";
     private static final String SELECT = "SELECT * FROM developers WHERE id = ?";
@@ -17,6 +19,7 @@ public class DeveloperDAO implements CrudDAO {
     private static final String UPDATE = "UPDATE developers SET first_name = ?, last_name = ?, speciality = ?, salary = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM developers WHERE id = ?";
     private static final String EXISTS = "SELECT EXISTS(SELECT id FROM developers WHERE id = ?)";
+    private static final String EXISTS_BY_ARGS = "SELECT EXISTS(SELECT id FROM developers WHERE first_name = ? AND last_name = ? AND speciality = ? AND salary = ?)";
 //    private static final String DELETE_HELP_TABLE = "DELETE FROM developers_skills WHERE developer_id = ?";
 //    private static final String DELETE_SEC_HELP_TABLE = "DELETE FROM teams_developers WHERE developer_id = ?";
     private Connection connection = DBWorker.getConnection();
@@ -139,6 +142,20 @@ public class DeveloperDAO implements CrudDAO {
 
     public boolean isExist(Long id) {
         return isExist(id, EXISTS);
+    }
+
+    public boolean isExist(String firstName, String lastName, String speciality, BigDecimal salary) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(EXISTS_BY_ARGS);
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            statement.setString(3, speciality);
+            statement.setBigDecimal(4, salary);
+            return isExist(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Developer getById(Long id) {

@@ -1,6 +1,7 @@
-package com.andersen.dao;
+package com.andersen.jdbc;
 
 import com.andersen.DBWorker;
+import com.andersen.idao.ISkillDAO;
 import com.andersen.model.Skill;
 
 import java.sql.Connection;
@@ -8,12 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SkillDAO implements CrudDAO {
+public class SkillDAO implements ISkillDAO {
 
     private static final String INSERT_SKILL = "INSERT INTO skills (name) VALUES(?)";
     private static final String SELECT_SKILL = "SELECT * FROM skills WHERE id = ?";
     private static final String UPDATE_SKILL = "UPDATE skills SET name=? WHERE id = ?";
     private static final String EXISTS = "SELECT EXISTS(SELECT id FROM skills WHERE id = ?)";
+    private static final String EXISTS_BY_ARGS = "SELECT EXISTS(SELECT id FROM skills WHERE name = ?)";
     private static final String DELETE_SKILL = "DELETE FROM skills WHERE id = ?";
 //    private static final String DELETE_HELP_TABLE = "DELETE FROM developers_skills WHERE skill_id = ?";
     private Connection connection = DBWorker.getConnection();
@@ -66,7 +68,18 @@ public class SkillDAO implements CrudDAO {
     }
 
     public boolean isExist(Long id) {
-        return isExist(id, EXISTS);
+        try {
+            PreparedStatement statement = connection.prepareStatement(EXISTS);
+            statement.setLong(1, id);
+            return isExist(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isExist(String name) {
+        return isExist(name, EXISTS_BY_ARGS);
     }
 
     public Skill getById(Long id) {

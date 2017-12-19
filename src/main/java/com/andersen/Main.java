@@ -1,13 +1,12 @@
 package com.andersen;
 
-import com.andersen.dao.*;
-import com.andersen.model.*;
+import com.andersen.jdbc.CompanyDAO;
+import com.andersen.jdbc.CustomerDAO;
+import com.andersen.jdbc.ProjectDAO;
+import com.andersen.jdbc.SkillDAO;
+import com.andersen.model.Skill;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
 
@@ -49,6 +48,12 @@ public class Main {
 
 //        DBWorker.getConnection();
 //        SkillDAO dao = new SkillDAO();
+//        System.out.println(dao.isExist(1L));
+//        System.out.println(dao.isExist(0L));
+//        dao.save(new Skill("Java"));
+//        dao.save(new Skill("C++"));
+//        dao.save(new Skill("Python"));
+//        dao.save(new Skill("Java"));
 //        System.out.println(dao.save(new Skill("Pascal")));
 //        dao.read(4L);
 //        dao.update(10L, new Skill("C#"));
@@ -82,6 +87,8 @@ public class Main {
 
 
 //        ProjectDAO dao = new ProjectDAO();
+//        System.out.println(dao.isExist("Calendar"));
+//        System.out.println(dao.isExist("Calendar2"));
 
 //        Set<Team> teams = new HashSet<>();
 //        teams.add(team);
@@ -102,6 +109,7 @@ public class Main {
 //        Company company = new Company("GoodBoys", projects);
 //        dao.save(company);
 //        System.out.println(dao.read(1L));
+//        System.out.println(dao.read(2L));
 //        Company updateCompany = new Company("GooBoyz", projects);
 //        dao.update(1L, updateCompany);
 

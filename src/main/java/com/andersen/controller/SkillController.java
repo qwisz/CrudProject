@@ -1,17 +1,16 @@
 package com.andersen.controller;
 
-import com.andersen.dao.SkillDAO;
+import com.andersen.jdbc.SkillDAO;
 import com.andersen.model.Skill;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class SkillController {
 
     private SkillDAO dao = new SkillDAO();
 
     public boolean create(String name) throws IOException {
-        return dao.save(new Skill(name));
+        return !dao.isExist(name) && dao.save(new Skill(name));
     }
 
     public String read(Long id) throws IOException {
@@ -19,7 +18,7 @@ public class SkillController {
     }
 
     public boolean update(Long id, String name) throws IOException {
-        return dao.update(id, new Skill(name));
+        return !dao.isExist(name) && dao.update(id, new Skill(name));
     }
 
     public void delete(Long id) throws IOException {

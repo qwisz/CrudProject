@@ -1,15 +1,17 @@
-package com.andersen.dao;
+package com.andersen.jdbc;
 
 import com.andersen.DBWorker;
+import com.andersen.idao.IProjectDAO;
 import com.andersen.model.Developer;
 import com.andersen.model.Project;
 import com.andersen.model.Team;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProjectDAO implements CrudDAO {
+public class ProjectDAO implements IProjectDAO {
 
     private static final String INSERT = "INSERT INTO projects (name) VALUES(?)";
     private static final String INSERT_PT = "INSERT INTO projects_teams (project_id, team_id) VALUES(?, ?)";
@@ -18,6 +20,7 @@ public class ProjectDAO implements CrudDAO {
     private static final String UPDATE = "UPDATE projects SET name = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM projects WHERE id = ?";
     private static final String EXISTS = "SELECT EXISTS(SELECT id FROM projects WHERE id = ?)";
+    private static final String EXISTS_BY_ARGS = "SELECT EXISTS(SELECT id FROM projects WHERE name = ?)";
     private Connection connection = DBWorker.getConnection();
     private TeamDAO teamDAO = new TeamDAO();
 
@@ -29,7 +32,7 @@ public class ProjectDAO implements CrudDAO {
             statement.setString(1, entity.getName());
             statement.execute();
 
-            String query = "select * from projects where name like ?";
+            String query = "SELECT * FROM projects WHERE name LIKE ?";
             PreparedStatement helpStatement = connection.prepareStatement(query);
             helpStatement.setString(1, entity.getName());
             ResultSet resultSet = helpStatement.executeQuery();
@@ -101,7 +104,7 @@ public class ProjectDAO implements CrudDAO {
 
             PreparedStatement statementTDIns = connection.prepareStatement(INSERT_PT);
             Set<Team> teams = entity.getTeams();
-            for (Team team: teams) {
+            for (Team team : teams) {
                 statementTDIns.setLong(1, id);
                 statementTDIns.setLong(2, team.getId());
                 statementTDIns.execute();
@@ -119,6 +122,10 @@ public class ProjectDAO implements CrudDAO {
 
     public boolean isExist(Long id) {
         return isExist(id, EXISTS);
+    }
+
+    public boolean isExist(String name) {
+        return isExist(name, EXISTS_BY_ARGS);
     }
 
     public Project getById(Long id) {
@@ -147,5 +154,24 @@ public class ProjectDAO implements CrudDAO {
             e.printStackTrace();
         }
         return project;
+    }
+
+    public Set<Project> getMappingProjects(Set<Long> ids) {
+
+        Set<Project> projects = new HashSet<>();
+        try {
+            for (Long id : ids) {
+                PreparedStatement statement = connection.prepareStatement(SELECT);
+                statement.setLong(1, id);
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    projects.add(new Project(id, resultSet.getString("name"), new HashSet<>()));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
     }
 }

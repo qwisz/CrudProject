@@ -1,7 +1,7 @@
 package com.andersen.controller;
 
-import com.andersen.dao.DeveloperDAO;
-import com.andersen.dao.SkillDAO;
+import com.andersen.jdbc.DeveloperDAO;
+import com.andersen.jdbc.SkillDAO;
 import com.andersen.model.Developer;
 import com.andersen.model.Skill;
 import java.io.IOException;
@@ -16,6 +16,9 @@ public class DeveloperController {
 
     public boolean create(String firstName, String lastName, String speciality,
                           Set<Long> ids, BigDecimal salary) throws IOException {
+
+        if (developerDAO.isExist(firstName, lastName, speciality, salary))
+            return false;
 
         Set<Skill> skills = new HashSet<>();
 
@@ -41,6 +44,9 @@ public class DeveloperController {
 
     public boolean update(Long id, String firstName, String lastName, String speciality,
                           Set<Long> ids, BigDecimal salary) throws IOException {
+
+        if (developerDAO.isExist(firstName, lastName, speciality, salary))
+            return false;
 
         Set<Skill> skills = new HashSet<>();
 

@@ -1,7 +1,7 @@
 package com.andersen.controller;
 
-import com.andersen.dao.CompanyDAO;
-import com.andersen.dao.ProjectDAO;
+import com.andersen.jdbc.CompanyDAO;
+import com.andersen.jdbc.ProjectDAO;
 import com.andersen.model.Company;
 import com.andersen.model.Project;
 

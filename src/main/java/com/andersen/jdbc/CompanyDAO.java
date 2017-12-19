@@ -1,16 +1,15 @@
-package com.andersen.dao;
+package com.andersen.jdbc;
 
 import com.andersen.DBWorker;
+import com.andersen.idao.ICompanyDAO;
 import com.andersen.model.Company;
-import com.andersen.model.Developer;
 import com.andersen.model.Project;
-import com.andersen.model.Team;
 
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CompanyDAO implements CrudDAO {
+public class CompanyDAO implements ICompanyDAO {
 
     private static final String INSERT = "INSERT INTO companies (name) VALUES(?)";
     private static final String INSERT_CP = "INSERT INTO companies_projects (company_id, project_id) VALUES(?, ?)";
@@ -19,7 +18,9 @@ public class CompanyDAO implements CrudDAO {
     private static final String UPDATE = "UPDATE companies SET name = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM companies WHERE id = ?";
     private static final String EXISTS = "SELECT EXISTS(SELECT id FROM companies WHERE id = ?)";
+    private static final String EXISTS_BY_ARGS = "SELECT EXISTS(SELECT id FROM companies WHERE name = ?)";
     private Connection connection = DBWorker.getConnection();
+    private ProjectDAO projectDAO = new ProjectDAO();
 
     public boolean save(Company entity) {
         try {
@@ -67,16 +68,13 @@ public class CompanyDAO implements CrudDAO {
             PreparedStatement statementCP = connection.prepareStatement(SELECT_CP);
             statementCP.setLong(1, id);
             ResultSet resultSet = statementCP.executeQuery();
-            Set<Project> projects = new HashSet<>();
+            Set<Long> ids = new HashSet<>();
             while (resultSet.next()) {
                 Long projectId = resultSet.getLong("project_id");
-                String query = "select * from projects where id = " + projectId;
-                Statement st = connection.createStatement();
-                ResultSet projectsSet = st.executeQuery(query);
-                while (projectsSet.next()) {
-                    projects.add(new Project(projectId, projectsSet.getString("name"), new HashSet<>()));
-                }
+                ids.add(projectId);
             }
+
+            Set<Project> projects = projectDAO.getMappingProjects(ids);
 
             company = new Company(id, name, projects);
         } catch (SQLException e) {
@@ -88,6 +86,7 @@ public class CompanyDAO implements CrudDAO {
         }
         return company.toString();
     }
+
 
     public boolean update(Long id, Company entity) {
         try {
@@ -119,5 +118,9 @@ public class CompanyDAO implements CrudDAO {
 
     public boolean isExist(Long id) {
         return isExist(id, EXISTS);
+    }
+
+    public boolean isExist(String name) {
+        return isExist(name, EXISTS_BY_ARGS);
     }
 }

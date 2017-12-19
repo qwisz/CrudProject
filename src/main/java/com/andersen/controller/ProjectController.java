@@ -1,7 +1,7 @@
 package com.andersen.controller;
 
-import com.andersen.dao.ProjectDAO;
-import com.andersen.dao.TeamDAO;
+import com.andersen.jdbc.ProjectDAO;
+import com.andersen.jdbc.TeamDAO;
 import com.andersen.model.Project;
 import com.andersen.model.Team;
 import java.io.IOException;

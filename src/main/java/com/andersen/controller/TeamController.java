@@ -1,7 +1,7 @@
 package com.andersen.controller;
 
-import com.andersen.dao.DeveloperDAO;
-import com.andersen.dao.TeamDAO;
+import com.andersen.jdbc.DeveloperDAO;
+import com.andersen.jdbc.TeamDAO;
 import com.andersen.model.Developer;
 import com.andersen.model.Team;
 
