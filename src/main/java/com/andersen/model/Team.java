@@ -1,12 +1,36 @@
 package com.andersen.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.security.PublicKey;
 import java.util.Set;
 
+@Data
+@Entity
+@Table(name = "teams")
 public class Team implements Identifier {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "teams_developers",
+            joinColumns = {@JoinColumn(name = "team_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "developer_id", referencedColumnName = "id")})
     private Set<Developer> developers;
+
+    public Team() {
+
+    }
 
     public Team(String name, Set<Developer> developers) {
         this.name = name;
@@ -16,30 +40,6 @@ public class Team implements Identifier {
     public Team(Long id, String name, Set<Developer> developers) {
         this(name, developers);
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Developer> getDevelopers() {
-        return developers;
-    }
-
-    public void setDevelopers(Set<Developer> developers) {
-        this.developers = developers;
     }
 
     @Override

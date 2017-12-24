@@ -1,6 +1,8 @@
 package com.andersen.view;
 
+import com.andersen.controller.DeveloperController;
 import com.andersen.controller.TeamController;
+import com.andersen.model.Developer;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import java.util.Set;
 public class TeamView implements IView {
 
     private TeamController controller = new TeamController();
+    private DeveloperController dc = new DeveloperController();
     private Scanner sc = new Scanner(System.in);
 
     public void create() throws IOException {
@@ -17,6 +20,12 @@ public class TeamView implements IView {
         String name = sc.nextLine();
 
         Set<Long> ids = getIds();
+        for (Long idd : ids) {
+            if (!dc.isExist(idd)) {
+                System.out.println("Developers with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.create(name, ids))
             System.out.println("Team is created");
@@ -37,6 +46,12 @@ public class TeamView implements IView {
 
         String name = sc.nextLine();
         Set<Long> ids = getIds();
+        for (Long idd : ids) {
+            if (!dc.isExist(idd)) {
+                System.out.println("Developers with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.update(id, name, ids)) {
             System.out.println("Team is created");

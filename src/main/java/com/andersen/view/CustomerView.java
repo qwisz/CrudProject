@@ -1,6 +1,7 @@
 package com.andersen.view;
 
 import com.andersen.controller.CustomerController;
+import com.andersen.controller.ProjectController;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import java.util.Set;
 public class CustomerView implements IView {
 
     private CustomerController controller = new CustomerController();
+    private ProjectController pc = new ProjectController();
     private Scanner sc = new Scanner(System.in);
 
     public void create() throws IOException {
@@ -19,6 +21,12 @@ public class CustomerView implements IView {
         System.out.println("Enter the address:");
         String address = sc.nextLine();
         Set<Long> projectsId = getIds();
+        for (Long idd : projectsId) {
+            if (!pc.isExist(idd)) {
+                System.out.println("Projects with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.create(firstName, lastName, address, projectsId))
             System.out.println("Customer is created");
@@ -41,6 +49,12 @@ public class CustomerView implements IView {
         System.out.println("Enter the address:");
         String address = sc.nextLine();
         Set<Long> projectsId = getIds();
+        for (Long idd : projectsId) {
+            if (!pc.isExist(idd)) {
+                System.out.println("Projects with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.update(id, firstName, lastName, address, projectsId))
             System.out.println("Customer is updated");

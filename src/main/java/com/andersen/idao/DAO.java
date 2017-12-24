@@ -1,8 +1,10 @@
 package com.andersen.idao;
 
 import com.andersen.DBWorker;
+import com.andersen.HibernateWorker;
 import com.andersen.model.Identifier;
-import org.yaml.snakeyaml.events.Event;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +22,17 @@ public interface DAO<T extends Identifier> {
     void delete(Long id);
 
 //    T getById(Long id);
+
+    default boolean saveAs(T entity) {
+        Session session = HibernateWorker.getSessionFactory().openSession();
+        Transaction transaction = null;
+        Long id = null;
+
+        transaction = session.beginTransaction();
+        id = (Long) session.save(entity);
+        transaction.commit();
+        return id != null;
+    }
 
     default void delete(Long id, String query) {
         try {

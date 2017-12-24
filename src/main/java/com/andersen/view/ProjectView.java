@@ -1,6 +1,7 @@
 package com.andersen.view;
 
 import com.andersen.controller.ProjectController;
+import com.andersen.controller.TeamController;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import java.util.Set;
 public class ProjectView implements IView {
 
     private ProjectController controller = new ProjectController();
+    private TeamController tc = new TeamController();
     private Scanner sc = new Scanner(System.in);
 
     public void create() throws IOException {
@@ -17,6 +19,12 @@ public class ProjectView implements IView {
         String name = sc.nextLine();
 
         Set<Long> ids = getIds();
+        for (Long idd : ids) {
+            if (!tc.isExist(idd)) {
+                System.out.println("Teams with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.create(name, ids))
             System.out.println("Team is created");
@@ -37,6 +45,12 @@ public class ProjectView implements IView {
 
         String name = sc.nextLine();
         Set<Long> ids = getIds();
+        for (Long idd : ids) {
+            if (!tc.isExist(idd)) {
+                System.out.println("Teams with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.update(id, name, ids)) {
             System.out.println("Project is created");

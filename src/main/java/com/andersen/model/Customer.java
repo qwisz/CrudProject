@@ -1,13 +1,35 @@
 package com.andersen.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "customers")
 public class Customer implements Identifier {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "address", nullable = false)
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customers_projects",
+            joinColumns = {@JoinColumn(name = "customer_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")})
     private Set<Project> projects;
 
     public Customer(String firstName, String lastName, String address, Set<Project> projects) {
@@ -20,46 +42,6 @@ public class Customer implements Identifier {
     public Customer(Long id, String firstName, String lastName, String address, Set<Project> projects) {
         this(firstName, lastName, address, projects);
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
     }
 
     @Override

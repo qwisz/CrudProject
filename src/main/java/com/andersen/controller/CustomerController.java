@@ -1,5 +1,7 @@
 package com.andersen.controller;
 
+import com.andersen.hibernate.CustomerDAOImpl;
+import com.andersen.hibernate.ProjectDAOImpl;
 import com.andersen.jdbc.CustomerDAO;
 import com.andersen.jdbc.ProjectDAO;
 import com.andersen.model.Customer;
@@ -11,13 +13,10 @@ import java.util.Set;
 
 public class CustomerController {
 
-    private CustomerDAO customerDAO = new CustomerDAO();
-    private ProjectDAO projectDAO = new ProjectDAO();
+    private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    private ProjectDAOImpl projectDAO = new ProjectDAOImpl();
 
     public boolean create(String firstName, String lastName, String address, Set<Long> ids) throws IOException {
-
-        if (customerDAO.isExist(firstName, lastName, address))
-            return false;
 
         Set<Project> projects = new HashSet<>();
 
@@ -35,9 +34,6 @@ public class CustomerController {
     }
 
     public boolean update(Long id, String firstName, String lastName, String address, Set<Long> ids) throws IOException {
-
-        if (customerDAO.isExist(firstName, lastName, address))
-            return false;
 
         Set<Project> projects = new HashSet<>();
 

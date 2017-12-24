@@ -1,6 +1,8 @@
 package com.andersen.view;
 
 import com.andersen.controller.DeveloperController;
+import com.andersen.controller.SkillController;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import java.util.Set;
 public class DeveloperView implements IView {
 
     private DeveloperController controller = new DeveloperController();
+    private SkillController scont = new SkillController();
     private Scanner sc = new Scanner(System.in);
 
     public void create() throws IOException {
@@ -20,6 +23,12 @@ public class DeveloperView implements IView {
         System.out.println("Enter speciality:");
         String speciality = sc.nextLine();
         Set<Long> skillsId = getIds();
+        for (Long idd : skillsId) {
+            if (!scont.isExist(idd)) {
+                System.out.println("Skills with one of such ids doesn't exist");
+                return;
+            }
+        }
         BigDecimal salary = getSalary();
 
         if (controller.create(firstName, lastName, speciality, skillsId, salary))
@@ -45,6 +54,14 @@ public class DeveloperView implements IView {
         String speciality = sc.nextLine();
 
         Set<Long> skillsId = getIds();
+
+        for (Long idd : skillsId) {
+            if (!scont.isExist(idd)) {
+                System.out.println("Skills with one of such ids doesn't exist");
+                return;
+            }
+        }
+
         BigDecimal salary = getSalary();
 
         if (controller.update(id, firstName, lastName, speciality, skillsId, salary)) {

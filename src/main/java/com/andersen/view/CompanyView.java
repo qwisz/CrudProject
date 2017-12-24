@@ -1,6 +1,7 @@
 package com.andersen.view;
 
 import com.andersen.controller.CompanyController;
+import com.andersen.controller.ProjectController;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import java.util.Set;
 public class CompanyView implements IView {
 
     private CompanyController controller = new CompanyController();
+    private ProjectController pc = new ProjectController();
     private Scanner sc = new Scanner(System.in);
 
     public void create() throws IOException {
@@ -17,6 +19,13 @@ public class CompanyView implements IView {
         String name = sc.nextLine();
 
         Set<Long> ids = getIds();
+
+        for (Long idd : ids) {
+            if (!pc.isExist(idd)) {
+                System.out.println("Projects with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.create(name, ids))
             System.out.println("Company is created");
@@ -36,6 +45,13 @@ public class CompanyView implements IView {
 
         String name = sc.nextLine();
         Set<Long> ids = getIds();
+
+        for (Long idd : ids) {
+            if (!pc.isExist(idd)) {
+                System.out.println("Projects with such ids doesn't exist");
+                return;
+            }
+        }
 
         if (controller.update(id, name, ids)) {
             System.out.println("Company is created");

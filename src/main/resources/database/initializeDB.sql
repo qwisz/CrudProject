@@ -2,7 +2,7 @@ CREATE TABLE skills (
   id   BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255),
   PRIMARY KEY(id)
-);
+)
 
 CREATE TABLE developers (
   id         BIGINT       NOT NULL AUTO_INCREMENT,
@@ -11,12 +11,12 @@ CREATE TABLE developers (
   speciality VARCHAR(255) NOT NULL,
   salary     DECIMAL      NOT NULL,
   PRIMARY KEY (id)
-);
+)
 
 CREATE TABLE teams (
   id   BIGINT       NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE projects (
@@ -29,7 +29,7 @@ CREATE TABLE companies (
   id   BIGINT       NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
-);
+)
 
 CREATE TABLE customers (
   id         BIGINT       NOT NULL AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE customers (
   last_name  VARCHAR(255) NOT NULL,
   address    VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
-);
+)
 
 CREATE TABLE developers_skills (
   developer_id BIGINT NOT NULL,

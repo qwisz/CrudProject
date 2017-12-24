@@ -1,11 +1,29 @@
 package com.andersen.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "companies")
 public class Company implements Identifier {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "companies_projects",
+            joinColumns = {@JoinColumn(name = "company_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")})
     private Set<Project> projects;
 
     public Company(String name, Set<Project> projects) {
@@ -16,30 +34,6 @@ public class Company implements Identifier {
     public Company(Long id, String name, Set<Project> projects) {
         this(name, projects);
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
     }
 
     @Override

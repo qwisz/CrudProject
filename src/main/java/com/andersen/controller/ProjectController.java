@@ -1,5 +1,7 @@
 package com.andersen.controller;
 
+import com.andersen.hibernate.ProjectDAOImpl;
+import com.andersen.hibernate.TeamDAOImpl;
 import com.andersen.jdbc.ProjectDAO;
 import com.andersen.jdbc.TeamDAO;
 import com.andersen.model.Project;
@@ -10,8 +12,8 @@ import java.util.Set;
 
 public class ProjectController {
 
-    private ProjectDAO projectDAO = new ProjectDAO();
-    private TeamDAO teamDAO = new TeamDAO();
+    private ProjectDAOImpl projectDAO = new ProjectDAOImpl();
+    private TeamDAOImpl teamDAO = new TeamDAOImpl();
 
     public boolean create(String name, Set<Long> ids) throws IOException {
         Set<Team> teams = new HashSet<>();

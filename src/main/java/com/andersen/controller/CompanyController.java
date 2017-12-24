@@ -1,5 +1,7 @@
 package com.andersen.controller;
 
+import com.andersen.hibernate.CompanyDAOImpl;
+import com.andersen.hibernate.ProjectDAOImpl;
 import com.andersen.jdbc.CompanyDAO;
 import com.andersen.jdbc.ProjectDAO;
 import com.andersen.model.Company;
@@ -11,8 +13,8 @@ import java.util.Set;
 
 public class CompanyController {
 
-    private CompanyDAO companyDAO = new CompanyDAO();
-    private ProjectDAO projectDAO = new ProjectDAO();
+    private CompanyDAOImpl companyDAO = new CompanyDAOImpl();
+    private ProjectDAOImpl projectDAO = new ProjectDAOImpl();
 
     public boolean create(String name, Set<Long> ids) throws IOException {
         Set<Project> projects = new HashSet<>();

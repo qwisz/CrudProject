@@ -1,5 +1,7 @@
 package com.andersen.controller;
 
+import com.andersen.hibernate.DeveloperDAOImpl;
+import com.andersen.hibernate.TeamDAOImpl;
 import com.andersen.jdbc.DeveloperDAO;
 import com.andersen.jdbc.TeamDAO;
 import com.andersen.model.Developer;
@@ -11,8 +13,8 @@ import java.util.Set;
 
 public class TeamController {
 
-    private TeamDAO teamDAO = new TeamDAO();
-    private DeveloperDAO developerDAO = new DeveloperDAO();
+    private TeamDAOImpl teamDAO = new TeamDAOImpl();
+    private DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
 
     public boolean create(String name, Set<Long> ids) throws IOException {
 

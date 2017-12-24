@@ -1,5 +1,7 @@
 package com.andersen.controller;
 
+import com.andersen.hibernate.DeveloperDAOImpl;
+import com.andersen.hibernate.SkillDAOImpl;
 import com.andersen.jdbc.DeveloperDAO;
 import com.andersen.jdbc.SkillDAO;
 import com.andersen.model.Developer;
@@ -11,14 +13,11 @@ import java.util.Set;
 
 public class DeveloperController {
 
-    private DeveloperDAO developerDAO = new DeveloperDAO();
-    private SkillDAO skillDAO = new SkillDAO();
+    private DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
+    private SkillDAOImpl skillDAO = new SkillDAOImpl();
 
     public boolean create(String firstName, String lastName, String speciality,
                           Set<Long> ids, BigDecimal salary) throws IOException {
-
-        if (developerDAO.isExist(firstName, lastName, speciality, salary))
-            return false;
 
         Set<Skill> skills = new HashSet<>();
 
@@ -44,9 +43,6 @@ public class DeveloperController {
 
     public boolean update(Long id, String firstName, String lastName, String speciality,
                           Set<Long> ids, BigDecimal salary) throws IOException {
-
-        if (developerDAO.isExist(firstName, lastName, speciality, salary))
-            return false;
 
         Set<Skill> skills = new HashSet<>();
 
